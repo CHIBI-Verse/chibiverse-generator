@@ -1,0 +1,32 @@
+{
+  "name": "chibiverse-generator",
+  "version": "1.0.0",
+  "description": "NFTs Generator.",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf build && node index.js",
+    "generate": "node index.js",
+    "rarity": "node utils/rarity.js",
+    "preview": "node utils/preview.js",
+    "pixelate": "node utils/pixelate.js",
+    "update_info": "node utils/update_info.js",
+    "preview_gif": "node utils/preview_gif.js",
+    "generate_metadata": "node utils/generate_metadata.js"
+  },
+  "dependencies": {
+    "canvas": "^2.8.0",
+    "gif-encoder-2": "^1.0.5",
+    "lodash": "^4.17.21",
+    "sha1": "^1.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CHIBI-Verse/chibiverse-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CHIBI-Verse/chibiverse-generator/issues"
+  },
+  "homepage": "https://github.com/CHIBI-Verse/chibiverse-generator#readme"
+}
