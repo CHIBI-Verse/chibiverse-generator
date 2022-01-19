@@ -179,8 +179,7 @@ const addAttributes = (_element) => {
 
 const loadLayerImg = async (_layer) => {
   return new Promise(async (resolve) => {
-    // const image = await loadImage(`${_layer.selectedElement.path}`);
-    const image = null;
+    const image = await loadImage(`${_layer.selectedElement.path}`);
     resolve({ layer: _layer, loadedImage: image });
   });
 };
@@ -364,35 +363,39 @@ const startCreating = async () => {
         });
 
         await Promise.all(loadedElements).then((renderObjectArray) => {
-          renderObjectArray.forEach((renderObject, index) => {
-            const typeObject = _.find(
-              renderObjectArray,
-              (o) => o.layer.name === 'Type',
+          debugLogs ? console.log('Clearing canvas') : null;
+          ctx.clearRect(0, 0, format.width, format.height);
+          if (gif.export) {
+            hashlipsGiffer = new HashlipsGiffer(
+              canvas,
+              ctx,
+              `${buildDir}/gifs/${abstractedIndexes[0]}.gif`,
+              gif.repeat,
+              gif.quality,
+              gif.delay,
             );
-
-            const type = _.get(typeObject, ['layer', 'selectedElement']);
-
-            const layerName = _.get(renderObject, ['layer', 'name']);
-
-            if (
-              type.name !== 'None' &&
-              (layerName === 'Head' ||
-                layerName === 'Body' ||
-                layerName === 'Skin' ||
-                layerName === 'Eye' ||
-                layerName === 'Mouth')
-            ) {
-              const o = _.cloneDeep(renderObject);
-
-              _.set(o, ['loadedImage'], null);
-              _.set(o, ['layer', 'selectedElement', 'name'], '-');
-              addAttributes(o);
-              return;
+            hashlipsGiffer.start();
+          }
+          if (background.generate) {
+            drawBackground();
+          }
+          renderObjectArray.forEach((renderObject, index) => {
+            drawElement(
+              renderObject,
+              index,
+              layerConfigurations[layerConfigIndex].layersOrder.length,
+            );
+            if (gif.export) {
+              hashlipsGiffer.add();
             }
-
-            addAttributes(renderObject);
           });
-
+          if (gif.export) {
+            hashlipsGiffer.stop();
+          }
+          debugLogs
+            ? console.log('Editions left to create: ', abstractedIndexes)
+            : null;
+          saveImage(abstractedIndexes[0]);
           addMetadata(newDna, abstractedIndexes[0]);
           saveMetaDataSingleFile(abstractedIndexes[0]);
           console.log(
