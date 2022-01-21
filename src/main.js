@@ -43,6 +43,7 @@ const buildSetup = () => {
   fs.mkdirSync(buildDir);
   fs.mkdirSync(`${buildDir}/json`);
   fs.mkdirSync(`${buildDir}/images`);
+  fs.mkdirSync(`${buildDir}/animation`);
   if (gif.export) {
     fs.mkdirSync(`${buildDir}/gifs`);
   }
@@ -177,6 +178,8 @@ const addMetadata = (_dna, _edition) => {
     tempMetadata.animation_url = `${baseAnimationUri}/${_edition}.mp4`;
 
     console.log(tempMetadata);
+
+    fs.writeFileSync(`${buildDir}/animation/${_edition}.mp4`, '');
   }
 
   metadataList.push(tempMetadata);
