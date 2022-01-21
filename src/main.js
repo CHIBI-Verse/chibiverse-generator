@@ -339,6 +339,8 @@ const saveMetaDataSingleFile = (_editionCount) => {
   const mouth = _.find(attributes, (o) => o.trait_type === 'Mouth');
   const weapon = _.find(attributes, (o) => o.trait_type === 'Weapon');
   const item = _.find(attributes, (o) => o.trait_type === 'Item');
+  const body = _.find(attributes, (o) => o.trait_type === 'Body');
+  const head = _.find(attributes, (o) => o.trait_type === 'Head');
 
   const backgroundStat =
     background?.value && statUtil.backgroundStat(background?.value);
@@ -347,6 +349,8 @@ const saveMetaDataSingleFile = (_editionCount) => {
   const mouthStat = mouth?.value && statUtil.mouthStat(mouth?.value);
   const weaponStat = weapon?.value && statUtil.weaponStat(weapon?.value);
   const itemStat = item?.value && statUtil.itemStat(item?.value);
+  const bodyStat = body?.value && statUtil.bodyStat(body?.value);
+  const headStat = head?.value && statUtil.headStat(head?.value);
 
   if (backgroundStat) {
     const backgroundStatHP = _.toSafeInteger(_.get(backgroundStat, ['hp'], 0));
@@ -631,6 +635,100 @@ const saveMetaDataSingleFile = (_editionCount) => {
     //   itemStatEnergyBonus,
     //   reduce_farming_time,
     //   itemStatReduceFarmingTime,
+    // });
+  }
+
+  if (bodyStat) {
+    const bodyStatHP = _.toSafeInteger(_.get(bodyStat, ['hp'], 0));
+    const bodyStatMP = _.toSafeInteger(_.get(bodyStat, ['mp'], 0));
+    const bodyStatAttack = _.toSafeInteger(_.get(bodyStat, ['attack'], 0));
+    const bodyStatMagicAttack = _.toSafeInteger(
+      _.get(bodyStat, ['magic_attack'], 0),
+    );
+    const bodyStatDefence = _.toSafeInteger(_.get(bodyStat, ['defence'], 0));
+    const bodyStatCoinBonus = _.toSafeInteger(
+      _.get(bodyStat, ['coin_bonus'], 0),
+    );
+    const bodyStatEnergyBonus = _.toSafeInteger(
+      _.get(bodyStat, ['energy_bonus'], 0),
+    );
+    const bodyStatReduceFarmingTime = _.toSafeInteger(
+      _.get(bodyStat, ['reduce_farming_time'], 0),
+    );
+
+    hp += bodyStatHP;
+    mp += bodyStatMP;
+    attack += bodyStatAttack;
+    magic_attack += bodyStatMagicAttack;
+    defence += bodyStatDefence;
+    coin_bonus += bodyStatCoinBonus;
+    energy_bonus += bodyStatEnergyBonus;
+    reduce_farming_time += bodyStatReduceFarmingTime;
+
+    // console.log({
+    //   hp,
+    //   bodyStatHP,
+    //   mp,
+    //   bodyStatMP,
+    //   attack,
+    //   bodyStatAttack,
+    //   magic_attack,
+    //   bodyStatMagicAttack,
+    //   defence,
+    //   bodyStatDefence,
+    //   coin_bonus,
+    //   bodyStatCoinBonus,
+    //   energy_bonus,
+    //   bodyStatEnergyBonus,
+    //   reduce_farming_time,
+    //   bodyStatReduceFarmingTime,
+    // });
+  }
+
+  if (headStat) {
+    const headStatHP = _.toSafeInteger(_.get(headStat, ['hp'], 0));
+    const headStatMP = _.toSafeInteger(_.get(headStat, ['mp'], 0));
+    const headStatAttack = _.toSafeInteger(_.get(headStat, ['attack'], 0));
+    const headStatMagicAttack = _.toSafeInteger(
+      _.get(headStat, ['magic_attack'], 0),
+    );
+    const headStatDefence = _.toSafeInteger(_.get(headStat, ['defence'], 0));
+    const headStatCoinBonus = _.toSafeInteger(
+      _.get(headStat, ['coin_bonus'], 0),
+    );
+    const headStatEnergyBonus = _.toSafeInteger(
+      _.get(headStat, ['energy_bonus'], 0),
+    );
+    const headStatReduceFarmingTime = _.toSafeInteger(
+      _.get(headStat, ['reduce_farming_time'], 0),
+    );
+
+    hp += headStatHP;
+    mp += headStatMP;
+    attack += headStatAttack;
+    magic_attack += headStatMagicAttack;
+    defence += headStatDefence;
+    coin_bonus += headStatCoinBonus;
+    energy_bonus += headStatEnergyBonus;
+    reduce_farming_time += headStatReduceFarmingTime;
+
+    // console.log({
+    //   hp,
+    //   headStatHP,
+    //   mp,
+    //   headStatMP,
+    //   attack,
+    //   headStatAttack,
+    //   magic_attack,
+    //   headStatMagicAttack,
+    //   defence,
+    //   headStatDefence,
+    //   coin_bonus,
+    //   headStatCoinBonus,
+    //   energy_bonus,
+    //   headStatEnergyBonus,
+    //   reduce_farming_time,
+    //   headStatReduceFarmingTime,
     // });
   }
 

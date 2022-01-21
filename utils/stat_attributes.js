@@ -183,3 +183,175 @@ exports.itemStat = function (val) {
       return null;
   }
 };
+
+exports.bodyStat = function (val) {
+  switch (val) {
+    case 'Adventure Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Asura':
+      return { hp: 20, defence: 20 };
+    case 'Bat Outfit':
+      return { hp: 20, defence: 20 };
+    case "Bishop's Robe":
+      return { hp: 10, defence: 10 };
+    case 'Black Hakama Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Black Hood':
+      return { hp: 15, defence: 15 };
+    case 'Brown Hakama Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Brown Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Chinese Battle Armor':
+      return { hp: 15, defence: 15 };
+    case 'Chinese Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Combat Outfit':
+      return { hp: 15, defence: 15 };
+    case 'Dark Armor':
+      return { hp: 20, defence: 20 };
+    case 'Darth Outfit':
+      return { hp: 20, defence: 20 };
+    case 'Death Outfit':
+      return { hp: 15, defence: 15 };
+    case 'Fighter Outfit 2':
+      return { hp: 15, defence: 15 };
+    case 'Fighter Outfit':
+      return { hp: 15, defence: 15 };
+    case 'Gold Armor':
+      return { hp: 20, defence: 20 };
+    case 'Green Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Hunter Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Iron Armor':
+      return { hp: 10, defence: 10 };
+    case 'Killer Outfit':
+      return { hp: 15, defence: 15 };
+    case 'Knight Armor':
+      return { hp: 10, defence: 10 };
+    case 'Leather Armor':
+      return { hp: 10, defence: 10 };
+    case 'Light Armor':
+      return { hp: 20, defence: 20 };
+    case 'Ninja Outfit':
+      return { hp: 15, defence: 15 };
+    case 'Normal Outfit':
+      return { hp: 5, defence: 5 };
+    case 'Old Wizard Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Onmyouji Outfit':
+      return { hp: 15, defence: 15 };
+    case 'Phantom Armor':
+      return { hp: 20, defence: 20 };
+    case 'Red Armor':
+      return { hp: 10, defence: 10 };
+    case 'Samurai Armor':
+      return { hp: 15, defence: 15 };
+    case 'Shippuden Outfit':
+      return { hp: 20, defence: 20 };
+    case 'Strange Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Superhero Outfit':
+      return { hp: 15, defence: 15 };
+    case 'Superpower Outfit':
+      return { hp: 20, defence: 20 };
+    case 'Training Outfit':
+      return { hp: 5, defence: 5 };
+    case 'White Hakama Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Wizard Outfit':
+      return { hp: 10, defence: 10 };
+    case 'Wounded Outfit':
+      return { hp: 5, defence: 5 };
+    default:
+      return null;
+  }
+};
+
+exports.headStat = function (val) {
+  switch (val) {
+    case 'Asura Hair':
+      return { hp: 10, defence: 10 };
+    case 'Bald Head':
+      return { hp: 5, defence: 5 };
+    case 'Bat Mask':
+      return { hp: 15, defence: 15 };
+    case "Bishop's Helmet":
+      return { hp: 15, defence: 15 };
+    case 'Black Hair':
+      return { hp: 10, defence: 10 };
+    case 'Blue Hair':
+      return { hp: 10, defence: 10 };
+    case 'Bronze Helmet':
+      return { hp: 10, defence: 10 };
+    case 'Brown Hair':
+      return { hp: 10, defence: 10 };
+    case 'Combat Helmet':
+      return { hp: 15, defence: 15 };
+    case 'Creed Hood':
+      return { hp: 15, defence: 15 };
+    case 'Dark Helmet':
+      return { hp: 20, defence: 20 };
+    case 'Darth Helmet':
+      return { hp: 20, defence: 20 };
+    case 'Death Hood':
+      return { hp: 15, defence: 15 };
+    case 'Demon Hair':
+      return { hp: 15, defence: 15 };
+    case 'Dragon Helmet':
+      return { hp: 20, defence: 20 };
+    case 'Fighter Hair 2':
+      return { hp: 10, defence: 10 };
+    case 'Fighter Hair':
+      return { hp: 10, defence: 10 };
+    case 'Fox Helmet':
+      return { hp: 15, defence: 15 };
+    case 'Green Hair':
+      return { hp: 5, defence: 5 };
+    case 'Hunter Cap':
+      return { hp: 15, defence: 15 };
+    case 'Ichi hair':
+      return { hp: 10, defence: 10 };
+    case 'Just hair':
+      return { hp: 10, defence: 10 };
+    case 'King hair':
+      return { hp: 10, defence: 10 };
+    case 'Knight Helm':
+      return { hp: 15, defence: 15 };
+    case 'Ninja Hair':
+      return { hp: 15, defence: 15 };
+    case 'Pajamas Hat':
+      return { hp: 10, defence: 10 };
+    case 'Phantom Helmet':
+      return { hp: 20, defence: 20 };
+    case 'Red Helmet':
+      return { hp: 10, defence: 10 };
+    case 'Samurai Helmet':
+      return { hp: 20, defence: 20 };
+    case 'Samurai hair':
+      return { hp: 10, defence: 10 };
+    case 'Soldier Helm':
+      return { hp: 15, defence: 15 };
+    case 'Stand Hat':
+      return { hp: 20, defence: 20 };
+    case 'Straw Hat':
+      return { hp: 15, defence: 15 };
+    case 'Suku Hair':
+      return { hp: 10, defence: 10 };
+    case 'Super Fighter Hair 2':
+      return { hp: 15, defence: 15 };
+    case 'Super Fighter Hair':
+      return { hp: 15, defence: 15 };
+    case "Valkyrie's Helm":
+      return { hp: 20, defence: 20 };
+    case 'Violet Hair':
+      return { hp: 10, defence: 10 };
+    case 'Wizard Hat':
+      return { hp: 10, defence: 10 };
+    case 'Yellow Hair':
+      return { hp: 5, defence: 5 };
+    default:
+      return null;
+  }
+};
