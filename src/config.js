@@ -5,10 +5,11 @@ const { NETWORK } = require(`${basePath}/constants/network.js`);
 const network = NETWORK.eth;
 
 // General metadata for Ethereum
-const namePrefix = 'CHIBI VERSE';
+const namePrefix = 'CHIBI';
 const description =
-  'Every character is created by a random algorithm which ensures that each character is unique and differentiated from the others.';
-const baseUri = 'ipfs://NewUriToReplace';
+  'A collection of 3,000 NFTs minted on the Ethereum blockchain. Every character is created by a random algorithm which ensures that each character is unique and differentiated from the others.';
+const baseImagesUri = 'ipfs://NewImagesToReplace';
+const baseAnimationUri = 'ipfs://NewAnimationUriToReplace';
 
 const solanaMetadata = {
   symbol: 'YC',
@@ -25,7 +26,7 @@ const solanaMetadata = {
 // If you have selected Solana then the collection starts from 0 automatically
 const layerConfigurations = [
   {
-    growEditionSizeTo: 3000,
+    growEditionSizeTo: 50,
     layersOrder: [
       { name: 'Background' },
       { name: 'Weapon' },
@@ -40,14 +41,14 @@ const layerConfigurations = [
   },
 ];
 
-const shuffleLayerConfigurations = false;
+const shuffleLayerConfigurations = true;
 
 const debugLogs = false;
 
 const format = {
-  width: 512,
-  height: 512,
-  smoothing: false,
+  width: 1024,
+  height: 1024,
+  smoothing: true,
 };
 
 const gif = {
@@ -87,7 +88,7 @@ const extraMetadata = {
 
 const rarityDelimiter = '#';
 
-const uniqueDnaTorrance = 10000;
+const uniqueDnaTorrance = 3000;
 
 const preview = {
   thumbPerRow: 5,
@@ -107,7 +108,8 @@ const preview_gif = {
 
 module.exports = {
   format,
-  baseUri,
+  baseImagesUri,
+  baseAnimationUri,
   description,
   background,
   uniqueDnaTorrance,

@@ -78,7 +78,7 @@ for (var layer in rarityData) {
 // print out rarity data
 for (var layer in rarityData) {
   // console.log(`Trait type: ${layer}`);
-  if (layer === 'Type') {
+  if (layer === 'Weapon') {
     console.log(`Trait type: ${layer}`);
     console.log();
     for (var trait in rarityData[layer]) {

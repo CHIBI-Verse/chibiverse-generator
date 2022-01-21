@@ -140,6 +140,8 @@ dist
 # OSX
 
 .DS_Store
-
+_layers/*
 layers/*
 !layers/.gitkeep
+compare/*
+*.zip

@@ -8,7 +8,8 @@ const buildDir = `${basePath}/build`;
 const layersDir = `${basePath}/layers`;
 const {
   format,
-  baseUri,
+  baseImagesUri,
+  baseAnimationUri,
   description,
   background,
   uniqueDnaTorrance,
@@ -23,6 +24,7 @@ const {
   solanaMetadata,
   gif,
 } = require(`${basePath}/src/config.js`);
+const statUtil = require('../utils/stat_attributes');
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = format.smoothing;
@@ -131,13 +133,14 @@ const addMetadata = (_dna, _edition) => {
   let tempMetadata = {
     name: `${namePrefix} #${_edition}`,
     description: description,
-    image: `${baseUri}/${_edition}.png`,
+    image: `${baseImagesUri}/${_edition}.png`,
+    external_url: `https://chibiverse.fun/chibi/${_edition}`,
     dna: sha1(_dna),
     edition: _edition,
     date: dateTime,
     ...extraMetadata,
     attributes: attributesList,
-    compiler: 'HashLips Art Engine',
+    // compiler: 'Toffysoft Custom Engine',
   };
   if (network == NETWORK.sol) {
     tempMetadata = {
@@ -165,22 +168,35 @@ const addMetadata = (_dna, _edition) => {
       },
     };
   }
+
+  const attributes = _.get(tempMetadata, ['attributes']);
+
+  const background = _.find(attributes, (o) => o.trait_type === 'Background');
+
+  if (_.includes(['Cold', 'Fire', 'Retro'], background.value)) {
+    tempMetadata.animation_url = `${baseAnimationUri}/${_edition}.mp4`;
+
+    console.log(tempMetadata);
+  }
+
   metadataList.push(tempMetadata);
   attributesList = [];
 };
 
 const addAttributes = (_element) => {
   let selectedElement = _element.layer.selectedElement;
-  attributesList.push({
-    trait_type: _element.layer.name,
-    value: selectedElement.name,
-  });
+
+  if (selectedElement.name != '-') {
+    attributesList.push({
+      trait_type: _element.layer.name,
+      value: selectedElement.name,
+    });
+  }
 };
 
 const loadLayerImg = async (_layer) => {
   return new Promise(async (resolve) => {
-    // const image = await loadImage(`${_layer.selectedElement.path}`);
-    const image = null;
+    const image = await loadImage(`${_layer.selectedElement.path}`);
     resolve({ layer: _layer, loadedImage: image });
   });
 };
@@ -203,7 +219,8 @@ const drawElement = (_renderObject, _index, _layersLen) => {
         text.yGap * (_index + 1),
         text.size,
       )
-    : ctx.drawImage(
+    : _renderObject.loadedImage &&
+      ctx.drawImage(
         _renderObject.loadedImage,
         0,
         0,
@@ -304,6 +321,373 @@ const writeMetaData = (_data) => {
 
 const saveMetaDataSingleFile = (_editionCount) => {
   let metadata = metadataList.find((meta) => meta.edition == _editionCount);
+
+  let hp = 0;
+  let mp = 0;
+  let attack = 0;
+  let magic_attack = 0;
+  let defence = 0;
+  let coin_bonus = 0;
+  let energy_bonus = 0;
+  let reduce_farming_time = 0;
+
+  const attributes = _.get(metadata, ['attributes'], []);
+  const attributesWithStat = [...attributes];
+  const background = _.find(attributes, (o) => o.trait_type === 'Background');
+  const type = _.find(attributes, (o) => o.trait_type === 'Type');
+  const eye = _.find(attributes, (o) => o.trait_type === 'Eye');
+  const mouth = _.find(attributes, (o) => o.trait_type === 'Mouth');
+  const weapon = _.find(attributes, (o) => o.trait_type === 'Weapon');
+  const item = _.find(attributes, (o) => o.trait_type === 'Item');
+
+  const backgroundStat =
+    background?.value && statUtil.backgroundStat(background?.value);
+  const typeStat = type?.value && statUtil.typeStat(type?.value);
+  const eyeStat = eye?.value && statUtil.eyeStat(eye?.value);
+  const mouthStat = mouth?.value && statUtil.mouthStat(mouth?.value);
+  const weaponStat = weapon?.value && statUtil.weaponStat(weapon?.value);
+  const itemStat = item?.value && statUtil.itemStat(item?.value);
+
+  if (backgroundStat) {
+    const backgroundStatHP = _.toSafeInteger(_.get(backgroundStat, ['hp'], 0));
+    const backgroundStatMP = _.toSafeInteger(_.get(backgroundStat, ['mp'], 0));
+    const backgroundStatAttack = _.toSafeInteger(
+      _.get(backgroundStat, ['attack'], 0),
+    );
+    const backgroundStatMagicAttack = _.toSafeInteger(
+      _.get(backgroundStat, ['magic_attack'], 0),
+    );
+    const backgroundStatDefence = _.toSafeInteger(
+      _.get(backgroundStat, ['defence'], 0),
+    );
+    const backgroundStatCoinBonus = _.toSafeInteger(
+      _.get(backgroundStat, ['coin_bonus'], 0),
+    );
+    const backgroundStatEnergyBonus = _.toSafeInteger(
+      _.get(backgroundStat, ['energy_bonus'], 0),
+    );
+    const backgroundStatReduceFarmingTime = _.toSafeInteger(
+      _.get(backgroundStat, ['reduce_farming_time'], 0),
+    );
+
+    hp += backgroundStatHP;
+    mp += backgroundStatMP;
+    attack += backgroundStatAttack;
+    magic_attack += backgroundStatMagicAttack;
+    defence += backgroundStatDefence;
+    coin_bonus += backgroundStatCoinBonus;
+    energy_bonus += backgroundStatEnergyBonus;
+    reduce_farming_time += backgroundStatReduceFarmingTime;
+
+    // console.log({
+    //   hp,
+    //   backgroundStatHP,
+    //   mp,
+    //   backgroundStatMP,
+    //   attack,
+    //   backgroundStatAttack,
+    //   magic_attack,
+    //   backgroundStatMagicAttack,
+    //   defence,
+    //   backgroundStatDefence,
+    //   coin_bonus,
+    //   backgroundStatCoinBonus,
+    //   energy_bonus,
+    //   backgroundStatEnergyBonus,
+    //   reduce_farming_time,
+    //   backgroundStatReduceFarmingTime,
+    // });
+  }
+
+  if (typeStat) {
+    const typeStatHP = _.toSafeInteger(_.get(typeStat, ['hp'], 0));
+    const typeStatMP = _.toSafeInteger(_.get(typeStat, ['mp'], 0));
+    const typeStatAttack = _.toSafeInteger(_.get(typeStat, ['attack'], 0));
+    const typeStatMagicAttack = _.toSafeInteger(
+      _.get(typeStat, ['magic_attack'], 0),
+    );
+    const typeStatDefence = _.toSafeInteger(_.get(typeStat, ['defence'], 0));
+    const typeStatCoinBonus = _.toSafeInteger(
+      _.get(typeStat, ['coin_bonus'], 0),
+    );
+    const typeStatEnergyBonus = _.toSafeInteger(
+      _.get(typeStat, ['energy_bonus'], 0),
+    );
+    const typeStatReduceFarmingTime = _.toSafeInteger(
+      _.get(typeStat, ['reduce_farming_time'], 0),
+    );
+
+    hp += typeStatHP;
+    mp += typeStatMP;
+    attack += typeStatAttack;
+    magic_attack += typeStatMagicAttack;
+    defence += typeStatDefence;
+    coin_bonus += typeStatCoinBonus;
+    energy_bonus += typeStatEnergyBonus;
+    reduce_farming_time += typeStatReduceFarmingTime;
+
+    // console.log({
+    //   hp,
+    //   typeStatHP,
+    //   mp,
+    //   typeStatMP,
+    //   attack,
+    //   typeStatAttack,
+    //   magic_attack,
+    //   typeStatMagicAttack,
+    //   defence,
+    //   typeStatDefence,
+    //   coin_bonus,
+    //   typeStatCoinBonus,
+    //   energy_bonus,
+    //   typeStatEnergyBonus,
+    //   reduce_farming_time,
+    //   typeStatReduceFarmingTime,
+    // });
+  }
+
+  if (eyeStat) {
+    const eyeStatHP = _.toSafeInteger(_.get(eyeStat, ['hp'], 0));
+    const eyeStatMP = _.toSafeInteger(_.get(eyeStat, ['mp'], 0));
+    const eyeStatAttack = _.toSafeInteger(_.get(eyeStat, ['attack'], 0));
+    const eyeStatMagicAttack = _.toSafeInteger(
+      _.get(eyeStat, ['magic_attack'], 0),
+    );
+    const eyeStatDefence = _.toSafeInteger(_.get(eyeStat, ['defence'], 0));
+    const eyeStatCoinBonus = _.toSafeInteger(_.get(eyeStat, ['coin_bonus'], 0));
+    const eyeStatEnergyBonus = _.toSafeInteger(
+      _.get(eyeStat, ['energy_bonus'], 0),
+    );
+    const eyeStatReduceFarmingTime = _.toSafeInteger(
+      _.get(eyeStat, ['reduce_farming_time'], 0),
+    );
+
+    hp += eyeStatHP;
+    mp += eyeStatMP;
+    attack += eyeStatAttack;
+    magic_attack += eyeStatMagicAttack;
+    defence += eyeStatDefence;
+    coin_bonus += eyeStatCoinBonus;
+    energy_bonus += eyeStatEnergyBonus;
+    reduce_farming_time += eyeStatReduceFarmingTime;
+
+    // console.log({
+    //   hp,
+    //   eyeStatHP,
+    //   mp,
+    //   eyeStatMP,
+    //   attack,
+    //   eyeStatAttack,
+    //   magic_attack,
+    //   eyeStatMagicAttack,
+    //   defence,
+    //   eyeStatDefence,
+    //   coin_bonus,
+    //   eyeStatCoinBonus,
+    //   energy_bonus,
+    //   eyeStatEnergyBonus,
+    //   reduce_farming_time,
+    //   eyeStatReduceFarmingTime,
+    // });
+  }
+
+  if (mouthStat) {
+    const mouthStatHP = _.toSafeInteger(_.get(mouthStat, ['hp'], 0));
+    const mouthStatMP = _.toSafeInteger(_.get(mouthStat, ['mp'], 0));
+    const mouthStatAttack = _.toSafeInteger(_.get(mouthStat, ['attack'], 0));
+    const mouthStatMagicAttack = _.toSafeInteger(
+      _.get(mouthStat, ['magic_attack'], 0),
+    );
+    const mouthStatDefence = _.toSafeInteger(_.get(mouthStat, ['defence'], 0));
+    const mouthStatCoinBonus = _.toSafeInteger(
+      _.get(mouthStat, ['coin_bonus'], 0),
+    );
+    const mouthStatEnergyBonus = _.toSafeInteger(
+      _.get(mouthStat, ['energy_bonus'], 0),
+    );
+    const mouthStatReduceFarmingTime = _.toSafeInteger(
+      _.get(mouthStat, ['reduce_farming_time'], 0),
+    );
+
+    hp += mouthStatHP;
+    mp += mouthStatMP;
+    attack += mouthStatAttack;
+    magic_attack += mouthStatMagicAttack;
+    defence += mouthStatDefence;
+    coin_bonus += mouthStatCoinBonus;
+    energy_bonus += mouthStatEnergyBonus;
+    reduce_farming_time += mouthStatReduceFarmingTime;
+
+    // console.log({
+    //   hp,
+    //   mouthStatHP,
+    //   mp,
+    //   mouthStatMP,
+    //   attack,
+    //   mouthStatAttack,
+    //   magic_attack,
+    //   mouthStatMagicAttack,
+    //   defence,
+    //   mouthStatDefence,
+    //   coin_bonus,
+    //   mouthStatCoinBonus,
+    //   energy_bonus,
+    //   mouthStatEnergyBonus,
+    //   reduce_farming_time,
+    //   mouthStatReduceFarmingTime,
+    // });
+  }
+
+  if (weaponStat) {
+    const weaponStatHP = _.toSafeInteger(_.get(weaponStat, ['hp'], 0));
+    const weaponStatMP = _.toSafeInteger(_.get(weaponStat, ['mp'], 0));
+    const weaponStatAttack = _.toSafeInteger(_.get(weaponStat, ['attack'], 0));
+    const weaponStatMagicAttack = _.toSafeInteger(
+      _.get(weaponStat, ['magic_attack'], 0),
+    );
+    const weaponStatDefence = _.toSafeInteger(
+      _.get(weaponStat, ['defence'], 0),
+    );
+    const weaponStatCoinBonus = _.toSafeInteger(
+      _.get(weaponStat, ['coin_bonus'], 0),
+    );
+    const weaponStatEnergyBonus = _.toSafeInteger(
+      _.get(weaponStat, ['energy_bonus'], 0),
+    );
+    const weaponStatReduceFarmingTime = _.toSafeInteger(
+      _.get(weaponStat, ['reduce_farming_time'], 0),
+    );
+
+    hp += weaponStatHP;
+    mp += weaponStatMP;
+    attack += weaponStatAttack;
+    magic_attack += weaponStatMagicAttack;
+    defence += weaponStatDefence;
+    coin_bonus += weaponStatCoinBonus;
+    energy_bonus += weaponStatEnergyBonus;
+    reduce_farming_time += weaponStatReduceFarmingTime;
+
+    // console.log({
+    //   hp,
+    //   weaponStatHP,
+    //   mp,
+    //   weaponStatMP,
+    //   attack,
+    //   weaponStatAttack,
+    //   magic_attack,
+    //   weaponStatMagicAttack,
+    //   defence,
+    //   weaponStatDefence,
+    //   coin_bonus,
+    //   weaponStatCoinBonus,
+    //   energy_bonus,
+    //   weaponStatEnergyBonus,
+    //   reduce_farming_time,
+    //   weaponStatReduceFarmingTime,
+    // });
+  }
+
+  if (itemStat) {
+    const itemStatHP = _.toSafeInteger(_.get(itemStat, ['hp'], 0));
+    const itemStatMP = _.toSafeInteger(_.get(itemStat, ['mp'], 0));
+    const itemStatAttack = _.toSafeInteger(_.get(itemStat, ['attack'], 0));
+    const itemStatMagicAttack = _.toSafeInteger(
+      _.get(itemStat, ['magic_attack'], 0),
+    );
+    const itemStatDefence = _.toSafeInteger(_.get(itemStat, ['defence'], 0));
+    const itemStatCoinBonus = _.toSafeInteger(
+      _.get(itemStat, ['coin_bonus'], 0),
+    );
+    const itemStatEnergyBonus = _.toSafeInteger(
+      _.get(itemStat, ['energy_bonus'], 0),
+    );
+    const itemStatReduceFarmingTime = _.toSafeInteger(
+      _.get(itemStat, ['reduce_farming_time'], 0),
+    );
+
+    hp += itemStatHP;
+    mp += itemStatMP;
+    attack += itemStatAttack;
+    magic_attack += itemStatMagicAttack;
+    defence += itemStatDefence;
+    coin_bonus += itemStatCoinBonus;
+    energy_bonus += itemStatEnergyBonus;
+    reduce_farming_time += itemStatReduceFarmingTime;
+
+    // console.log({
+    //   hp,
+    //   itemStatHP,
+    //   mp,
+    //   itemStatMP,
+    //   attack,
+    //   itemStatAttack,
+    //   magic_attack,
+    //   itemStatMagicAttack,
+    //   defence,
+    //   itemStatDefence,
+    //   coin_bonus,
+    //   itemStatCoinBonus,
+    //   energy_bonus,
+    //   itemStatEnergyBonus,
+    //   reduce_farming_time,
+    //   itemStatReduceFarmingTime,
+    // });
+  }
+
+  attributesWithStat.push({
+    trait_type: 'HP',
+    value: hp >= 100 ? 100 : hp,
+    max_value: 100,
+  });
+  attributesWithStat.push({
+    trait_type: 'MP',
+    value: mp >= 100 ? 100 : mp,
+    max_value: 100,
+  });
+  attributesWithStat.push({
+    trait_type: 'Attack',
+    value: attack >= 100 ? 100 : attack,
+    max_value: 100,
+  });
+  attributesWithStat.push({
+    trait_type: 'Magic Attack',
+    value: magic_attack >= 100 ? 100 : magic_attack,
+    max_value: 100,
+  });
+  attributesWithStat.push({
+    trait_type: 'Defence',
+    value: defence >= 100 ? 100 : defence,
+    max_value: 100,
+  });
+
+  if (coin_bonus) {
+    attributesWithStat.push({
+      display_type: 'boost_percentage',
+      trait_type: 'Coin Bonus',
+      value: coin_bonus >= 10 ? 10 : coin_bonus,
+    });
+  }
+
+  if (energy_bonus) {
+    attributesWithStat.push({
+      display_type: 'boost_percentage',
+      trait_type: 'Energy Bonus',
+      value: energy_bonus >= 10 ? 10 : energy_bonus,
+    });
+  }
+
+  if (reduce_farming_time) {
+    attributesWithStat.push({
+      display_type: 'boost_percentage',
+      trait_type: 'Reduce Farming Time',
+      value: reduce_farming_time >= 10 ? 10 : reduce_farming_time,
+    });
+  }
+
+  _.set(metadata, ['attributes'], attributesWithStat);
+
+  delete metadata.edition;
+
   debugLogs
     ? console.log(
         `Writing metadata for ${_editionCount}: ${JSON.stringify(metadata)}`,
@@ -364,6 +748,22 @@ const startCreating = async () => {
         });
 
         await Promise.all(loadedElements).then((renderObjectArray) => {
+          debugLogs ? console.log('Clearing canvas') : null;
+          ctx.clearRect(0, 0, format.width, format.height);
+          if (gif.export) {
+            hashlipsGiffer = new HashlipsGiffer(
+              canvas,
+              ctx,
+              `${buildDir}/gifs/${abstractedIndexes[0]}.gif`,
+              gif.repeat,
+              gif.quality,
+              gif.delay,
+            );
+            hashlipsGiffer.start();
+          }
+          if (background.generate) {
+            drawBackground();
+          }
           renderObjectArray.forEach((renderObject, index) => {
             const typeObject = _.find(
               renderObjectArray,
@@ -386,13 +786,34 @@ const startCreating = async () => {
 
               _.set(o, ['loadedImage'], null);
               _.set(o, ['layer', 'selectedElement', 'name'], '-');
-              addAttributes(o);
+
+              drawElement(
+                o,
+                index,
+                layerConfigurations[layerConfigIndex].layersOrder.length,
+              );
+              if (gif.export) {
+                hashlipsGiffer.add();
+              }
               return;
             }
 
-            addAttributes(renderObject);
+            drawElement(
+              renderObject,
+              index,
+              layerConfigurations[layerConfigIndex].layersOrder.length,
+            );
+            if (gif.export) {
+              hashlipsGiffer.add();
+            }
           });
-
+          if (gif.export) {
+            hashlipsGiffer.stop();
+          }
+          debugLogs
+            ? console.log('Editions left to create: ', abstractedIndexes)
+            : null;
+          saveImage(abstractedIndexes[0]);
           addMetadata(newDna, abstractedIndexes[0]);
           saveMetaDataSingleFile(abstractedIndexes[0]);
           console.log(
