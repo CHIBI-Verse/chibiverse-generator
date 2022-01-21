@@ -141,6 +141,7 @@ dist
 
 .DS_Store
 _layers/*
+__layers/*
 layers/*
 !layers/.gitkeep
 compare/*
