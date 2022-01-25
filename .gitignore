@@ -142,6 +142,7 @@ dist
 .DS_Store
 _layers/*
 __layers/*
+___layers/*
 __json/*
 layers/*
 !layers/.gitkeep

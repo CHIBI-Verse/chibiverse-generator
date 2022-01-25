@@ -180,6 +180,10 @@ const addMetadata = (_dna, _edition) => {
     console.log(tempMetadata);
 
     fs.writeFileSync(`${buildDir}/animation/${_edition}.mp4`, '');
+    fs.writeFileSync(
+      `${buildDir}/animation/${_edition}.png`,
+      canvas.toBuffer('image/png'),
+    );
   }
 
   metadataList.push(tempMetadata);
@@ -876,7 +880,7 @@ const startCreating = async () => {
             const layerName = _.get(renderObject, ['layer', 'name']);
 
             if (
-              type.name !== 'None' &&
+              type?.name !== 'None' &&
               (layerName === 'Head' ||
                 layerName === 'Body' ||
                 layerName === 'Skin' ||
