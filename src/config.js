@@ -7,7 +7,7 @@ const network = NETWORK.eth;
 // General metadata for Ethereum
 const namePrefix = 'CHIBI';
 const description =
-  'A collection of 3,000 NFTs minted on the Ethereum blockchain. Every character is created by a random algorithm which ensures that each character is unique and differentiated from the others.';
+  'A collection of 10,000 NFTs minted on the Ethereum blockchain. Every character is created by a random algorithm which ensures that each character is unique and differentiated from the others.';
 const baseImagesUri = 'ipfs://NewImagesToReplace';
 const baseAnimationUri = 'ipfs://NewAnimationUriToReplace';
 
@@ -26,7 +26,7 @@ const solanaMetadata = {
 // If you have selected Solana then the collection starts from 0 automatically
 const layerConfigurations = [
   {
-    growEditionSizeTo: 3000,
+    growEditionSizeTo: 10000,
     layersOrder: [
       { name: 'Background' },
       { name: 'Weapon' },
