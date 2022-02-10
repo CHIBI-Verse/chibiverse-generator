@@ -42,6 +42,7 @@ const buildSetup = () => {
   }
   fs.mkdirSync(buildDir);
   fs.mkdirSync(`${buildDir}/json`);
+  fs.mkdirSync(`${buildDir}/metadata`);
   fs.mkdirSync(`${buildDir}/images`);
   fs.mkdirSync(`${buildDir}/animation`);
   if (gif.export) {
@@ -324,6 +325,7 @@ const createDna = (_layers) => {
 
 const writeMetaData = (_data) => {
   fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data);
+  fs.writeFileSync(`${buildDir}/metadata/_metadata`, _data);
 };
 
 const saveMetaDataSingleFile = (_editionCount) => {
@@ -800,6 +802,10 @@ const saveMetaDataSingleFile = (_editionCount) => {
     : null;
   fs.writeFileSync(
     `${buildDir}/json/${_editionCount}.json`,
+    JSON.stringify(metadata, null, 2),
+  );
+  fs.writeFileSync(
+    `${buildDir}/metadata/${_editionCount}`,
     JSON.stringify(metadata, null, 2),
   );
 };
