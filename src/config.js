@@ -26,7 +26,7 @@ const solanaMetadata = {
 // If you have selected Solana then the collection starts from 0 automatically
 const layerConfigurations = [
   {
-    growEditionSizeTo: 100,
+    growEditionSizeTo: 10000,
     layersOrder: [
       { name: 'Background' },
       { name: 'Weapon' },
@@ -46,8 +46,8 @@ const shuffleLayerConfigurations = true;
 const debugLogs = false;
 
 const format = {
-  width: 500,
-  height: 500,
+  width: 1024,
+  height: 1024,
   smoothing: true,
 };
 
@@ -59,7 +59,7 @@ const gif = {
 };
 
 const text = {
-  only: true,
+  only: false,
   color: '#000',
   size: 20,
   xGap: 40,
